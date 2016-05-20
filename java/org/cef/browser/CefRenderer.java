@@ -11,6 +11,7 @@ import java.nio.ByteBuffer;
 
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 
 import org.lwjgl.opengl.EXTBgra;
 
@@ -62,7 +63,7 @@ class CefRenderer {
         int bound = glGetInteger(GL_TEXTURE_BINDING_2D);
         glBindTexture(GL_TEXTURE_2D, texture_id_[0]);
 
-        wr.startDrawingQuads();
+        /*wr.startDrawingQuads();
         //t.disableColor(); //Doesn't work?
         wr.setColorOpaque(255, 255, 255);
 
@@ -71,7 +72,14 @@ class CefRenderer {
         wr.addVertexWithUV(x2, y1, 0, 1.f, 1.f);
         wr.addVertexWithUV(x2, y2, 0, 1.f, 0);
         wr.addVertexWithUV(x1, y2, 0, 0, 0);
-        t.draw();
+        t.draw();*/
+        
+        wr.begin(GL_QUADS, DefaultVertexFormats.POSITION);			
+		wr.pos(x1, y1, 0).tex(0, 1.f).endVertex(); 
+		wr.pos(x2, y1, 0).tex(1.f, 1.f).endVertex();
+		wr.pos(x2, y2, 0).tex(1.f, 0).endVertex();
+		wr.pos(x1, y2, 0).tex(0, 0).endVertex();
+		t.draw();
 
         glBindTexture(GL_TEXTURE_2D, bound);
     }

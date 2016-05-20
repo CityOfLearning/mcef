@@ -1,8 +1,10 @@
 package net.montoyo.mcef.example;
 
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.montoyo.mcef.api.IBrowser;
 import net.montoyo.mcef.api.MCEFApi;
 import org.lwjgl.input.Keyboard;
@@ -98,13 +100,20 @@ public class ScreenCfg extends GuiScreen {
             Tessellator t = Tessellator.getInstance();
             WorldRenderer wr = t.getWorldRenderer();
 
-            wr.startDrawing(GL11.GL_LINE_LOOP);
+            /*wr.startDrawing(GL11.GL_LINE_LOOP);
             wr.setColorOpaque(255, 255, 255);
             wr.addVertex(unscaleX(x + width), unscaleY(y + height), .0d);
             wr.addVertex(unscaleX(x + width + 10), unscaleY(y + height), .0d);
             wr.addVertex(unscaleX(x + width + 10), unscaleY(y + height + 10), .0d);
             wr.addVertex(unscaleX(x + width), unscaleY(y + height + 10), .0d);
-            t.draw();
+            t.draw();*/
+            
+            wr.begin(GL11.GL_LINE_LOOP, DefaultVertexFormats.POSITION);
+			wr.pos(unscaleX(x + width), unscaleY(y + height), .0d).endVertex();
+			wr.pos(unscaleX(x + width + 10), unscaleY(y + height), .0d).endVertex();
+			wr.pos(unscaleX(x + width + 10), unscaleY(y + height + 10), .0d).endVertex();
+			wr.pos(unscaleX(x + width), unscaleY(y + height + 10), .0d).endVertex();
+			t.draw();
         }
 
         GL11.glPopAttrib();

@@ -99,14 +99,6 @@ public class ScreenCfg extends GuiScreen {
         if(drawSquare) {
             Tessellator t = Tessellator.getInstance();
             WorldRenderer wr = t.getWorldRenderer();
-
-            /*wr.startDrawing(GL11.GL_LINE_LOOP);
-            wr.setColorOpaque(255, 255, 255);
-            wr.addVertex(unscaleX(x + width), unscaleY(y + height), .0d);
-            wr.addVertex(unscaleX(x + width + 10), unscaleY(y + height), .0d);
-            wr.addVertex(unscaleX(x + width + 10), unscaleY(y + height + 10), .0d);
-            wr.addVertex(unscaleX(x + width), unscaleY(y + height + 10), .0d);
-            t.draw();*/
             
             wr.begin(GL11.GL_LINE_LOOP, DefaultVertexFormats.POSITION);
 			wr.pos(unscaleX(x + width), unscaleY(y + height), .0d).endVertex();

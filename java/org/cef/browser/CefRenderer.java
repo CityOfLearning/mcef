@@ -62,19 +62,8 @@ class CefRenderer {
 
         int bound = glGetInteger(GL_TEXTURE_BINDING_2D);
         glBindTexture(GL_TEXTURE_2D, texture_id_[0]);
-
-        /*wr.startDrawingQuads();
-        //t.disableColor(); //Doesn't work?
-        wr.setColorOpaque(255, 255, 255);
-
-        //                 X   Y  Z          U    V
-        wr.addVertexWithUV(x1, y1, 0, 0, 1.f);
-        wr.addVertexWithUV(x2, y1, 0, 1.f, 1.f);
-        wr.addVertexWithUV(x2, y2, 0, 1.f, 0);
-        wr.addVertexWithUV(x1, y2, 0, 0, 0);
-        t.draw();*/
         
-        wr.begin(GL_QUADS, DefaultVertexFormats.POSITION);			
+        wr.begin(GL_QUADS, DefaultVertexFormats.POSITION_TEX);			
 		wr.pos(x1, y1, 0).tex(0, 1.f).endVertex(); 
 		wr.pos(x2, y1, 0).tex(1.f, 1.f).endVertex();
 		wr.pos(x2, y2, 0).tex(1.f, 0).endVertex();

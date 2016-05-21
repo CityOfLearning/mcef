@@ -45,13 +45,9 @@ public class ClientProxy extends BaseProxy {
 	
 	@Override
 	public void onInit() {
-		ROOT = mc.mcDataDir.getAbsolutePath().replaceAll("\\\\", "/");
-		
-		if(ROOT.endsWith("."))
-			ROOT = ROOT.substring(0, ROOT.length() - 1);
-		
-		if(ROOT.endsWith("/"))
-			ROOT = ROOT.substring(0, ROOT.length() - 1);
+		File f = new File(mc.mcDataDir.getParentFile(), "mcef");
+		f.mkdirs();
+		ROOT = f.getAbsolutePath().replaceAll("\\\\", "/");
 		
 		UpdateFrame uf = new UpdateFrame();
 		RemoteConfig cfg = new RemoteConfig();

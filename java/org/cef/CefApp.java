@@ -154,12 +154,14 @@ public class CefApp extends CefAppHandlerAdapter {
       settings_ = settings.clone();
 
       //montoyo: not needed.
-    /*if (OS.isWindows()) {
-      System.loadLibrary("jawt");
+	  //dom amato: is needed to keep app folder tidy, as jcef is depenedent
+	  // on libcef so must be called first. This way we can store libs elsewhere
+    if (OS.isWindows()) {
+      //System.loadLibrary("jawt");
       System.loadLibrary("libcef");
     } else if (OS.isLinux()) {
       System.loadLibrary("cef");
-    }*/
+    }
 
 
     System.loadLibrary("jcef");

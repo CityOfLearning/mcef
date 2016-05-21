@@ -9,8 +9,8 @@ import java.awt.Component;
 import org.cef.browser.CefBrowserWindow;
 
 public class CefBrowserWindowMac implements CefBrowserWindow {
-  @Override
-  public long getWindowHandle(Component comp) {
-    return 0;
-  }
+	@Override
+	public long getWindowHandle(Component comp) {
+		return 0;
+	}
 }

@@ -1,15 +1,15 @@
 package net.montoyo.mcef.client;
 
-import net.montoyo.mcef.api.IDisplayHandler;
-
 import org.cef.browser.CefBrowser;
 import org.cef.browser.CefBrowserOsr;
 import org.cef.handler.CefDisplayHandler;
 
+import net.montoyo.mcef.api.IDisplayHandler;
+
 public class DisplayHandler implements CefDisplayHandler {
-	
+
 	IDisplayHandler dh;
-	
+
 	public DisplayHandler(IDisplayHandler idh) {
 		dh = idh;
 	}
@@ -20,13 +20,8 @@ public class DisplayHandler implements CefDisplayHandler {
 	}
 
 	@Override
-	public void onTitleChange(CefBrowser browser, String title) {
-		dh.onTitleChange((CefBrowserOsr) browser, title);
-	}
-
-	@Override
-	public boolean onTooltip(CefBrowser browser, String text) {
-		return dh.onTooltip((CefBrowserOsr) browser, text);
+	public boolean onConsoleMessage(CefBrowser browser, String message, String source, int line) {
+		return dh.onConsoleMessage((CefBrowserOsr) browser, message, source, line);
 	}
 
 	@Override
@@ -35,8 +30,13 @@ public class DisplayHandler implements CefDisplayHandler {
 	}
 
 	@Override
-	public boolean onConsoleMessage(CefBrowser browser, String message, String source, int line) {
-		return dh.onConsoleMessage((CefBrowserOsr) browser, message, source, line);
+	public void onTitleChange(CefBrowser browser, String title) {
+		dh.onTitleChange((CefBrowserOsr) browser, title);
+	}
+
+	@Override
+	public boolean onTooltip(CefBrowser browser, String text) {
+		return dh.onTooltip((CefBrowserOsr) browser, text);
 	}
 
 }

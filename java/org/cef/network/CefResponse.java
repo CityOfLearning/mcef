@@ -6,8 +6,8 @@ package org.cef.network;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * Class used to represent a web response. The methods of this class may be
@@ -15,81 +15,81 @@ import java.util.Map.Entry;
  */
 public abstract class CefResponse {
 
-  // This CTOR can't be called directly. Call method create() instead.
-  CefResponse() {
-  }
+	/**
+	 * Create a new CefRequest object.
+	 */
+	public static final CefResponse create() {
+		return CefResponse_N.createNative();
+	}
 
-  /**
-   * Create a new CefRequest object.
-   */
-  public static final CefResponse create() {
-    return CefResponse_N.createNative();
-  }
+	// This CTOR can't be called directly. Call method create() instead.
+	CefResponse() {
+	}
 
-  /**
-   * Returns true if this object is read-only.
-   */
-  public abstract boolean isReadOnly();
+	/**
+	 * Get the value for the specified response header field.
+	 */
+	public abstract String getHeader(String name);
 
-  /**
-   * Get the response status code.
-   */
-  public abstract int getStatus();
+	/**
+	 * Get all response header fields.
+	 */
+	public abstract void getHeaderMap(Map<String, String> headerMap);
 
-  /**
-   * Set the response status code.
-   */
-  public abstract void setStatus(int status);
+	/**
+	 * Get the response mime type.
+	 */
+	public abstract String getMimeType();
 
-  /**
-   * Get the response status text.
-   */
-  public abstract String getStatusText();
+	/**
+	 * Get the response status code.
+	 */
+	public abstract int getStatus();
 
-  /**
-   * Set the response status text.
-   */
-  public abstract void setStatusText(String statusText);
+	/**
+	 * Get the response status text.
+	 */
+	public abstract String getStatusText();
 
-  /**
-   * Get the response mime type.
-   */
-  public abstract String getMimeType();
+	/**
+	 * Returns true if this object is read-only.
+	 */
+	public abstract boolean isReadOnly();
 
-  /**
-   * Set the response mime type.
-   */
-  public abstract void setMimeType(String mimeType);
+	/**
+	 * Set all response header fields.
+	 */
+	public abstract void setHeaderMap(Map<String, String> headerMap);
 
-  /**
-   * Get the value for the specified response header field.
-   */
-  public abstract String getHeader(String name);
+	/**
+	 * Set the response mime type.
+	 */
+	public abstract void setMimeType(String mimeType);
 
-  /**
-   * Get all response header fields.
-   */
-  public abstract void getHeaderMap(Map<String,String> headerMap);
+	/**
+	 * Set the response status code.
+	 */
+	public abstract void setStatus(int status);
 
-  /**
-   * Set all response header fields.
-   */
-  public abstract void setHeaderMap(Map<String,String> headerMap);
+	/**
+	 * Set the response status text.
+	 */
+	public abstract void setStatusText(String statusText);
 
-  @Override
-  public String toString() {
-    String returnValue = "\nHTTP-Response:";
+	@Override
+	public String toString() {
+		String returnValue = "\nHTTP-Response:";
 
-    returnValue += "\n    HTTP/1.1 " + getStatus() + " " + getStatusText();
-    returnValue += "\n    Content-Type: " + getMimeType();
+		returnValue += "\n    HTTP/1.1 " + getStatus() + " " + getStatusText();
+		returnValue += "\n    Content-Type: " + getMimeType();
 
-    Map<String, String> headerMap = new HashMap<String, String>();
-    getHeaderMap(headerMap);
-    Set<Entry<String,String>> entrySet = headerMap.entrySet();
-    for (Entry<String,String> entry : entrySet) {
-      returnValue += "    " + entry.getKey() + "=" + entry.getValue() + "\n";
-    }
+		Map<String, String> headerMap = new HashMap<String, String>();
+		getHeaderMap(headerMap);
+		Set<Entry<String, String>> entrySet = headerMap.entrySet();
+		for (Entry<String, String> entry : entrySet) {
+			returnValue += "    " + entry.getKey() + "=" + entry.getValue() + "\n";
+		}
 
-    return returnValue;
-  }
+		return returnValue;
+	}
 }

@@ -11,17 +11,18 @@ import java.util.Vector;
  */
 public interface CefFileDialogCallback {
 
-  /**
-   * Continue the file selection with the specified file_paths. This may be
-   * a single value or a list of values depending on the dialog mode. An empty
-   * value is treated the same as calling Cancel().
-   * 
-   * @param filePaths list of selected file paths or an empty list.
-   */
-  public void Continue(Vector<String> filePaths);
+	/**
+	 * Cancel the file selection.
+	 */
+	public void cancel();
 
-  /**
-   * Cancel the file selection.
-   */
-  public void cancel();
+	/**
+	 * Continue the file selection with the specified file_paths. This may be a
+	 * single value or a list of values depending on the dialog mode. An empty
+	 * value is treated the same as calling Cancel().
+	 *
+	 * @param filePaths
+	 *            list of selected file paths or an empty list.
+	 */
+	public void Continue(Vector<String> filePaths);
 }

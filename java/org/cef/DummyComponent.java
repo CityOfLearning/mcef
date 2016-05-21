@@ -7,9 +7,9 @@ import java.awt.Point;
 
 public class DummyComponent extends Component {
 
-    @Override
-    public Point getLocationOnScreen() {
-        return new Point(0, 0);
-    }
+	@Override
+	public Point getLocationOnScreen() {
+		return new Point(0, 0);
+	}
 
 }

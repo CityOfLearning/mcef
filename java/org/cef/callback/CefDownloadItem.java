@@ -10,85 +10,85 @@ import java.util.Date;
  * Class used to represent a download item.
  */
 public interface CefDownloadItem {
-  /**
-   * Returns true if this object is valid. Do not call any other methods if this
-   * function returns false.
-   */
-  boolean isValid();
+	/**
+	 * Returns the content disposition.
+	 */
+	String getContentDisposition();
 
-  /**
-   * Returns true if the download is in progress.
-   */
-  boolean isInProgress();
+	/**
+	 * Returns a simple speed estimate in bytes/s.
+	 */
+	long getCurrentSpeed();
 
-  /**
-   * Returns true if the download is complete.
-   */
-  boolean isComplete();
+	/**
+	 * Returns the time that the download ended.
+	 */
+	Date getEndTime();
 
-  /**
-   * Returns true if the download has been canceled or interrupted.
-   */
-  boolean isCanceled();
+	/**
+	 * Returns the full path to the downloaded or downloading file.
+	 */
+	String getFullPath();
 
-  /**
-   * Returns a simple speed estimate in bytes/s.
-   */
-  long getCurrentSpeed();
+	/**
+	 * Returns the unique identifier for this download.
+	 */
+	int getId();
 
-  /**
-   * Returns the rough percent complete or -1 if the receive total size is
-   * unknown.
-   */
-  int getPercentComplete();
+	/**
+	 * Returns the mime type.
+	 */
+	String getMimeType();
 
-  /**
-   * Returns the total number of bytes.
-   */
-  long getTotalBytes();
+	/**
+	 * Returns the rough percent complete or -1 if the receive total size is
+	 * unknown.
+	 */
+	int getPercentComplete();
 
-  /**
-   * Returns the number of received bytes.
-   */
-  long getReceivedBytes();
+	/**
+	 * Returns the number of received bytes.
+	 */
+	long getReceivedBytes();
 
-  /**
-   * Returns the time that the download started.
-   */
-  Date getStartTime();
+	/**
+	 * Returns the time that the download started.
+	 */
+	Date getStartTime();
 
-  /**
-   * Returns the time that the download ended.
-   */
-  Date getEndTime();
+	/**
+	 * Returns the suggested file name.
+	 */
+	String getSuggestedFileName();
 
-  /**
-   * Returns the full path to the downloaded or downloading file.
-   */
-  String getFullPath();
+	/**
+	 * Returns the total number of bytes.
+	 */
+	long getTotalBytes();
 
-  /**
-   * Returns the unique identifier for this download.
-   */
-  int getId();
+	/**
+	 * Returns the URL.
+	 */
+	String getURL();
 
-  /**
-   * Returns the URL.
-   */
-  String getURL();
+	/**
+	 * Returns true if the download has been canceled or interrupted.
+	 */
+	boolean isCanceled();
 
-  /**
-   * Returns the suggested file name.
-   */
-  String getSuggestedFileName();
+	/**
+	 * Returns true if the download is complete.
+	 */
+	boolean isComplete();
 
-  /**
-   * Returns the content disposition.
-   */
-  String getContentDisposition();
+	/**
+	 * Returns true if the download is in progress.
+	 */
+	boolean isInProgress();
 
-  /**
-   * Returns the mime type.
-   */
-  String getMimeType();
+	/**
+	 * Returns true if this object is valid. Do not call any other methods if
+	 * this function returns false.
+	 */
+	boolean isValid();
 }

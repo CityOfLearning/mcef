@@ -4,20 +4,19 @@
 
 package org.cef.callback;
 
-class CefAllowCertificateErrorCallback_N extends CefNativeAdapter implements
-    CefAllowCertificateErrorCallback {
+class CefAllowCertificateErrorCallback_N extends CefNativeAdapter implements CefAllowCertificateErrorCallback {
 
-  CefAllowCertificateErrorCallback_N() {
-  }
+	CefAllowCertificateErrorCallback_N() {
+	}
 
-  @Override
-  public void Continue(boolean allow) {
-    try {
-      N_Continue(allow);
-    } catch (UnsatisfiedLinkError ule) {
-      ule.printStackTrace();
-    }
-  }
+	@Override
+	public void Continue(boolean allow) {
+		try {
+			N_Continue(allow);
+		} catch (UnsatisfiedLinkError ule) {
+			ule.printStackTrace();
+		}
+	}
 
-  private final native void N_Continue(boolean allow);
+	private final native void N_Continue(boolean allow);
 }

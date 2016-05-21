@@ -9,23 +9,23 @@ package org.cef.network;
  */
 public interface CefWebPluginInfo {
 
-  /**
-   * Returns the plugin name (i.e. Flash).
-   */
-  public String getName();
+	/**
+	 * Returns a description of the plugin from the version information.
+	 */
+	public String getDescription();
 
-  /**
-   * Returns the plugin file path (DLL/bundle/library).
-   */
-  public String getPath();
+	/**
+	 * Returns the plugin name (i.e. Flash).
+	 */
+	public String getName();
 
-  /**
-   * Returns the version of the plugin (may be OS-specific).
-   */
-  public String getVersion();
+	/**
+	 * Returns the plugin file path (DLL/bundle/library).
+	 */
+	public String getPath();
 
-  /**
-   * Returns a description of the plugin from the version information.
-   */
-  public String getDescription();
+	/**
+	 * Returns the version of the plugin (may be OS-specific).
+	 */
+	public String getVersion();
 }

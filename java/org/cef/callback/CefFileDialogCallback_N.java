@@ -6,30 +6,30 @@ package org.cef.callback;
 
 import java.util.Vector;
 
-class CefFileDialogCallback_N extends CefNativeAdapter implements
-    CefFileDialogCallback {
+class CefFileDialogCallback_N extends CefNativeAdapter implements CefFileDialogCallback {
 
-  CefFileDialogCallback_N() {
-  }
+	CefFileDialogCallback_N() {
+	}
 
-  @Override
-  public void Continue(Vector<String> filePaths) {
-    try {
-      N_Continue(filePaths);
-    } catch (UnsatisfiedLinkError ule) {
-      ule.printStackTrace();
-    }
-  }
+	@Override
+	public void cancel() {
+		try {
+			N_Cancel();
+		} catch (UnsatisfiedLinkError ule) {
+			ule.printStackTrace();
+		}
+	}
 
-  @Override
-  public void cancel() {
-    try {
-      N_Cancel();
-    } catch (UnsatisfiedLinkError ule) {
-      ule.printStackTrace();
-    }
-  }
+	@Override
+	public void Continue(Vector<String> filePaths) {
+		try {
+			N_Continue(filePaths);
+		} catch (UnsatisfiedLinkError ule) {
+			ule.printStackTrace();
+		}
+	}
 
-  private final native void N_Continue(Vector<String> filePaths);
-  private final native void N_Cancel();
+	private final native void N_Cancel();
+
+	private final native void N_Continue(Vector<String> filePaths);
 }

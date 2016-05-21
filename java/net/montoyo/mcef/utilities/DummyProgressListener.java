@@ -2,6 +2,7 @@ package net.montoyo.mcef.utilities;
 
 /**
  * Dummy progress listener. Does nothing.
+ *
  * @author montoyo
  * @see Util#secure(IProgressListener)
  *

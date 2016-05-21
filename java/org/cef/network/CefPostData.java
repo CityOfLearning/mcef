@@ -11,62 +11,62 @@ import java.util.Vector;
  * class may be called on any thread.
  */
 public abstract class CefPostData {
-  
-  //This CTOR can't be called directly. Call method create() instead.
-  CefPostData() {
-  }
 
-  /**
-   * Create a new CefPostData object.
-   */
-  public static final CefPostData create() {
-    return CefPostData_N.createNative();
-  }
+	/**
+	 * Create a new CefPostData object.
+	 */
+	public static final CefPostData create() {
+		return CefPostData_N.createNative();
+	}
 
-  /**
-   * Returns true if this object is read-only.
-   */
-  public abstract boolean isReadOnly();
+	// This CTOR can't be called directly. Call method create() instead.
+	CefPostData() {
+	}
 
-  /**
-   * Returns the number of existing post data elements.
-   */
-  public abstract int getElementCount();
+	/**
+	 * Add the specified post data element. Returns true if the add succeeds.
+	 */
+	public abstract boolean addElement(CefPostDataElement element);
 
-  /**
-   * Retrieve the post data elements.
-   */
-  public abstract void getElements(Vector<CefPostDataElement> elements);
+	/**
+	 * Returns the number of existing post data elements.
+	 */
+	public abstract int getElementCount();
 
-  /**
-   * Remove the specified post data element. Returns true if the removal
-   * succeeds.
-   */
-  public abstract boolean removeElement(CefPostDataElement element);
+	/**
+	 * Retrieve the post data elements.
+	 */
+	public abstract void getElements(Vector<CefPostDataElement> elements);
 
-  /**
-   * Add the specified post data element. Returns true if the add succeeds.
-   */
-  public abstract boolean addElement(CefPostDataElement element);
+	/**
+	 * Returns true if this object is read-only.
+	 */
+	public abstract boolean isReadOnly();
 
-  /**
-   * Remove all existing post data elements.
-   */
-  public abstract void removeElements();
+	/**
+	 * Remove the specified post data element. Returns true if the removal
+	 * succeeds.
+	 */
+	public abstract boolean removeElement(CefPostDataElement element);
 
-  @Override
-  public String toString() {
-    return toString(null);
-  }
+	/**
+	 * Remove all existing post data elements.
+	 */
+	public abstract void removeElements();
 
-  public String toString(String mimeType) {
-    Vector<CefPostDataElement> elements = new Vector<CefPostDataElement>();
-    getElements(elements);
+	@Override
+	public String toString() {
+		return toString(null);
+	}
 
-    String returnValue = "";
-    for (CefPostDataElement el : elements) {
-      returnValue += el.toString(mimeType) + "\n";
-    }
-    return returnValue;
-  }
+	public String toString(String mimeType) {
+		Vector<CefPostDataElement> elements = new Vector<CefPostDataElement>();
+		getElements(elements);
+
+		String returnValue = "";
+		for (CefPostDataElement el : elements) {
+			returnValue += el.toString(mimeType) + "\n";
+		}
+		return returnValue;
+	}
 }

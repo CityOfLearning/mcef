@@ -9,11 +9,12 @@ package org.cef.callback;
  * invalid SSL certificates are encountered.
  */
 public interface CefAllowCertificateErrorCallback {
-  /**
-   * Continue the url request.
-   * 
-   * @param allow If set to true the request will be allowed.
-   *   Otherwise, the request will be denied.
-   */
-  void Continue(boolean allow);
+	/**
+	 * Continue the url request.
+	 *
+	 * @param allow
+	 *            If set to true the request will be allowed. Otherwise, the
+	 *            request will be denied.
+	 */
+	void Continue(boolean allow);
 }

@@ -8,24 +8,18 @@ import org.cef.browser.CefBrowser;
 import org.cef.callback.CefGeolocationCallback;
 
 /**
- * An abstract adapter class for receiving geolocation requests.
- * The methods in this class are empty.
- * This class exists as convenience for creating handler objects.
+ * An abstract adapter class for receiving geolocation requests. The methods in
+ * this class are empty. This class exists as convenience for creating handler
+ * objects.
  */
-public abstract class CefGeolocationHandlerAdapter
-    implements CefGeolocationHandler {
-  @Override
-  public boolean onRequestGeolocationPermission(
-      CefBrowser browser,
-      String requesting_url,
-      int request_id,
-      CefGeolocationCallback callback) {
-    return false;
-  }
+public abstract class CefGeolocationHandlerAdapter implements CefGeolocationHandler {
+	@Override
+	public void onCancelGeolocationPermission(CefBrowser browser, String requesting_url, int request_id) {
+	}
 
-  @Override
-  public void onCancelGeolocationPermission(CefBrowser browser,
-                                            String requesting_url,
-                                            int request_id) {
-  }
+	@Override
+	public boolean onRequestGeolocationPermission(CefBrowser browser, String requesting_url, int request_id,
+			CefGeolocationCallback callback) {
+		return false;
+	}
 }

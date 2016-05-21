@@ -17,7 +17,7 @@ import org.cef.callback.CefNative;
 public abstract class CefClientHandler implements CefNative {
   // Used internally to store a pointer to the CEF object.
   private HashMap<String,Long> N_CefHandle = new HashMap<String, Long>();
-  private Vector<CefMessageRouter> msgRouters = new Vector<CefMessageRouter>();
+  private Vector<CefMessageRouter> msgRouters = new Vector<>();
 
   @Override
   public void setNativeRef(String identifer, long nativeRef) {
@@ -59,7 +59,7 @@ public abstract class CefClientHandler implements CefNative {
 
   /**
    * Returns the java part of the browser implementation.
-   * @param identifier the unique identifier of the browser.
+   * @param identifer the unique identifier of the browser.
    * @return The found browser or null if none is found.
    */
   abstract protected CefBrowser getBrowser(int identifier);

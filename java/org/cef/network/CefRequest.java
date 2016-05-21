@@ -137,7 +137,7 @@ public abstract class CefRequest {
 
     /**
      * Removes a qualifier from the enum.
-     * @param flag The qualifier to be removed.
+     * @param The qualifier to be removed.
      */
     public void removeQualifier(TransitionFlags flag) {
       value &= ~flag.getValue();
@@ -359,7 +359,7 @@ public abstract class CefRequest {
     returnValue += "\n  firstPartyForCookies: " + getFirstPartyForCookies();
     returnValue += "\n    " + getMethod() + " " + getURL() + " HTTP/1.1\n";
     
-    Map<String, String> headerMap = new HashMap<String, String>();
+    Map<String, String> headerMap = new HashMap<>();
     getHeaderMap(headerMap);
     Set<Entry<String,String>> entrySet = headerMap.entrySet();
     String mimeType = null;

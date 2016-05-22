@@ -5,14 +5,12 @@
 package org.cef.handler;
 
 import org.cef.browser.CefBrowser;
-import org.cef.callback.CefAllowCertificateErrorCallback;
 import org.cef.callback.CefAuthCallback;
-import org.cef.callback.CefQuotaCallback;
+import org.cef.callback.CefRequestCallback;
 import org.cef.handler.CefLoadHandler.ErrorCode;
 import org.cef.misc.BoolRef;
 import org.cef.misc.StringRef;
 import org.cef.network.CefRequest;
-import org.cef.network.CefWebPluginInfo;
 
 /**
  * An abstract adapter class for receiving browser request events. The methods
@@ -37,18 +35,13 @@ public abstract class CefRequestHandlerAdapter implements CefRequestHandler {
 	}
 
 	@Override
-	public boolean onBeforePluginLoad(CefBrowser browser, String url, String policyUrl, CefWebPluginInfo info) {
-		return false;
-	}
-
-	@Override
 	public boolean onBeforeResourceLoad(CefBrowser browser, CefRequest request) {
 		return false;
 	}
 
 	@Override
-	public boolean onCertificateError(ErrorCode cert_error, String request_url,
-			CefAllowCertificateErrorCallback callback) {
+	public boolean onCertificateError(CefBrowser browser, ErrorCode cert_error, String request_url,
+			CefRequestCallback callback) {
 		return false;
 	}
 
@@ -61,7 +54,7 @@ public abstract class CefRequestHandlerAdapter implements CefRequestHandler {
 	}
 
 	@Override
-	public boolean onQuotaRequest(CefBrowser browser, String origin_url, long new_size, CefQuotaCallback callback) {
+	public boolean onQuotaRequest(CefBrowser browser, String origin_url, long new_size, CefRequestCallback callback) {
 		return false;
 	}
 
@@ -70,6 +63,6 @@ public abstract class CefRequestHandlerAdapter implements CefRequestHandler {
 	}
 
 	@Override
-	public void onResourceRedirect(CefBrowser browser, String old_url, StringRef new_url) {
+	public void onResourceRedirect(CefBrowser browser, CefRequest request, StringRef new_url) {
 	}
 }

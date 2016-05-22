@@ -301,7 +301,7 @@ class CefDragData_N extends CefDragData implements CefNative {
 
 	@Override
 	public String toString() {
-		Vector<String> names = new Vector<String>();
+		Vector<String> names = new Vector<>();
 		getFileNames(names);
 		String fileNamesStr = "{";
 		for (String s : names) {

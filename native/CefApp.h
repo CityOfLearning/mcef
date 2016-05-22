@@ -9,6 +9,14 @@ extern "C" {
 #endif
 /*
  * Class:     org_cef_CefApp
+ * Method:    N_PreInitialize
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_cef_CefApp_N_1PreInitialize
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_cef_CefApp
  * Method:    N_Initialize
  * Signature: (Ljava/lang/String;Lorg/cef/handler/CefAppHandler;Lorg/cef/CefSettings;)Z
  */
@@ -73,6 +81,28 @@ JNIEXPORT jboolean JNICALL Java_org_cef_CefApp_N_1ClearSchemeHandlerFactories
 JNIEXPORT void JNICALL Java_org_cef_CefApp_N_1ContinueDefaultTerminate
   (JNIEnv *, jobject);
 
+#ifdef __cplusplus
+}
+#endif
+#endif
+/* Header for class org_cef_CefApp_CefAppState */
+
+#ifndef _Included_org_cef_CefApp_CefAppState
+#define _Included_org_cef_CefApp_CefAppState
+#ifdef __cplusplus
+extern "C" {
+#endif
+#ifdef __cplusplus
+}
+#endif
+#endif
+/* Header for class org_cef_CefApp_CefVersion */
+
+#ifndef _Included_org_cef_CefApp_CefVersion
+#define _Included_org_cef_CefApp_CefVersion
+#ifdef __cplusplus
+extern "C" {
+#endif
 #ifdef __cplusplus
 }
 #endif

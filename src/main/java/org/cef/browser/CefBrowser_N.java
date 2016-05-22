@@ -436,8 +436,8 @@ abstract class CefBrowser_N extends CefNativeAdapter implements CefBrowser {
 
 	private final native void N_ReplaceMisspelling(String word);
 
-	private final native void N_RunFileDialog(FileDialogMode mode, String title, String defaultFileName,
-			Vector<String> acceptTypes, CefRunFileDialogCallback callback);
+	private final native void N_RunFileDialog(FileDialogMode mode, String title, String defaultFilePath,
+			Vector<String> acceptFilters, int selectedAcceptFilter, CefRunFileDialogCallback callback);
 
 	private final native void N_SendKeyEvent(KeyEvent e);
 
@@ -500,10 +500,10 @@ abstract class CefBrowser_N extends CefNativeAdapter implements CefBrowser {
 	}
 
 	@Override
-	public void runFileDialog(FileDialogMode mode, String title, String defaultFileName, Vector<String> acceptTypes,
-			CefRunFileDialogCallback callback) {
+	public void runFileDialog(FileDialogMode mode, String title, String defaultFilePath, Vector<String> acceptFilters,
+			int selectedAcceptFilter, CefRunFileDialogCallback callback) {
 		try {
-			N_RunFileDialog(mode, title, defaultFileName, acceptTypes, callback);
+			N_RunFileDialog(mode, title, defaultFilePath, acceptFilters, selectedAcceptFilter, callback);
 		} catch (UnsatisfiedLinkError ule) {
 			ule.printStackTrace();
 		}

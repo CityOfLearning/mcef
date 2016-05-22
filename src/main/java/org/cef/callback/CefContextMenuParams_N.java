@@ -92,16 +92,6 @@ class CefContextMenuParams_N extends CefNativeAdapter implements CefContextMenuP
 	}
 
 	@Override
-	public int getMisspellingHash() {
-		try {
-			return N_GetMisspellingHash();
-		} catch (UnsatisfiedLinkError ule) {
-			ule.printStackTrace();
-		}
-		return 0;
-	}
-
-	@Override
 	public String getPageUrl() {
 		try {
 			return N_GetPageUrl();
@@ -216,8 +206,6 @@ class CefContextMenuParams_N extends CefNativeAdapter implements CefContextMenuP
 	private final native MediaType N_GetMediaType();
 
 	private final native String N_GetMisspelledWord();
-
-	private final native int N_GetMisspellingHash();
 
 	private final native String N_GetPageUrl();
 

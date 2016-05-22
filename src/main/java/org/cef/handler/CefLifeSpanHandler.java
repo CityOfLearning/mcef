@@ -74,6 +74,13 @@ public interface CefLifeSpanHandler {
 	 *            May be empty if none is specified with the request.
 	 * @param target_frame_name
 	 *            May be empty if none is specified with the request.
+	 * @param target_disposition
+	 *            Indicates where the user intended to open the popup (e.g.
+	 *            current tab, new tab, etc).
+	 * @param user_gesture
+	 *            Will be true if the popup was opened via explicit user gesture
+	 *            (e.g. clicking a link) or false if the popup opened
+	 *            automatically (e.g. via the DomContentLoaded event).
 	 * @param popupFeatures
 	 *            Contains information about the requested popup window
 	 * @param windowInfo
@@ -90,6 +97,8 @@ public interface CefLifeSpanHandler {
 	boolean onBeforePopup(CefBrowser browser,
 			// CefFrame frame,
 			String target_url, String target_frame_name
+	// WindowOpenDisposition target_disposition,
+	// bool user_gesture,
 	// CefPopupFeatures popupFeatures,
 	// CefWindowInfo windowInfo,
 	// CefClient client,

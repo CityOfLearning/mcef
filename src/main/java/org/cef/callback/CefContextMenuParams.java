@@ -130,12 +130,6 @@ public interface CefContextMenuParams {
 	String getMisspelledWord();
 
 	/**
-	 * Returns the hash of the misspelled word, if any, that the context menu
-	 * was invoked on.
-	 */
-	int getMisspellingHash();
-
-	/**
 	 * Returns the URL of the top level page that the context menu was invoked
 	 * on.
 	 */

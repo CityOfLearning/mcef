@@ -2,8 +2,6 @@
 // reserved. Use of this source code is governed by a BSD-style license that
 // can be found in the LICENSE file.
 
-// Modified by montoyo for MCEF
-
 package org.cef;
 
 import java.io.File;
@@ -300,6 +298,11 @@ public class CefApp extends CefAppHandlerAdapter {
 			appHandler_ = this;
 		}
 
+		// Perform native pre-initialization.
+		if (!N_PreInitialize()) {
+			throw new IllegalStateException("Failed to pre-initialize native code");
+		}
+
 		// On Mac we're registering a shutdown hook to shutdown the native CEF
 		// part. This is useful if it is missed to call CefApp.disopse() before
 		// System.exit(0). Unfortunately this approach works only for Mac
@@ -389,6 +392,7 @@ public class CefApp extends CefAppHandlerAdapter {
 		switch (getState()) {
 		case NEW:
 			setState(CefAppState.INITIALIZING);
+			context.setDaemon(true);
 			context.start();
 			// FALL THRU
 
@@ -464,7 +468,6 @@ public class CefApp extends CefAppHandlerAdapter {
 		if (myLoc != null) {
 			return myLoc;
 		}
-
 		String library_path = System.getProperty("java.library.path");
 		String[] paths = library_path.split(System.getProperty("path.separator"));
 		for (String path : paths) {
@@ -571,6 +574,8 @@ public class CefApp extends CefAppHandlerAdapter {
 	private final native CefVersion N_GetVersion();
 
 	private final native boolean N_Initialize(String pathToJavaDLL, CefAppHandler appHandler, CefSettings settings);
+
+	private final native boolean N_PreInitialize();
 
 	private final native boolean N_RegisterSchemeHandlerFactory(String schemeName, String domainName,
 			CefSchemeHandlerFactory factory);

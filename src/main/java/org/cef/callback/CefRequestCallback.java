@@ -5,16 +5,20 @@
 package org.cef.callback;
 
 /**
- * Callback interface used for asynchronous continuation of url requests when
- * invalid SSL certificates are encountered.
+ * Callback interface used for asynchronous continuation of quota requests.
  */
-public interface CefAllowCertificateErrorCallback {
+public interface CefRequestCallback {
+	/**
+	 * Cancel the url request.
+	 */
+	void Cancel();
+
 	/**
 	 * Continue the url request.
 	 *
 	 * @param allow
-	 *            If set to true the request will be allowed. Otherwise, the
-	 *            request will be denied.
+	 *            If set to true the request will be continued. Otherwise, the
+	 *            request will be canceled.
 	 */
 	void Continue(boolean allow);
 }

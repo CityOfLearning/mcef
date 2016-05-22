@@ -18,12 +18,10 @@ public interface CefGeolocationHandler {
 	 *
 	 * @param browser
 	 *            The corresponding browser.
-	 * @param requesting_url
-	 *            is the URL that originally requested permission.
 	 * @param request_id
 	 *            is the unique ID for the permission request.
 	 */
-	public void onCancelGeolocationPermission(CefBrowser browser, String requesting_url, int request_id);
+	public void onCancelGeolocationPermission(CefBrowser browser, int request_id);
 
 	/**
 	 * Called when a page requests permission to access geolocation information.

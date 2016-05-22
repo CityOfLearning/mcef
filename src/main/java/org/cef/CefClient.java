@@ -21,7 +21,6 @@ import org.cef.browser.CefBrowser;
 import org.cef.browser.CefBrowserFactory;
 import org.cef.browser.CefMessageRouter;
 import org.cef.browser.CefRequestContext;
-import org.cef.callback.CefAllowCertificateErrorCallback;
 import org.cef.callback.CefAuthCallback;
 import org.cef.callback.CefBeforeDownloadCallback;
 import org.cef.callback.CefContextMenuParams;
@@ -32,7 +31,7 @@ import org.cef.callback.CefFileDialogCallback;
 import org.cef.callback.CefGeolocationCallback;
 import org.cef.callback.CefJSDialogCallback;
 import org.cef.callback.CefMenuModel;
-import org.cef.callback.CefQuotaCallback;
+import org.cef.callback.CefRequestCallback;
 import org.cef.handler.CefClientHandler;
 import org.cef.handler.CefContextMenuHandler;
 import org.cef.handler.CefDialogHandler;
@@ -52,7 +51,6 @@ import org.cef.handler.CefWindowHandler;
 import org.cef.misc.BoolRef;
 import org.cef.misc.StringRef;
 import org.cef.network.CefRequest;
-import org.cef.network.CefWebPluginInfo;
 
 /**
  * Client that owns a browser and renderer.
@@ -469,14 +467,6 @@ public class CefClient extends CefClientHandler implements CefContextMenuHandler
 	}
 
 	@Override
-	public boolean onBeforePluginLoad(CefBrowser browser, String url, String policyUrl, CefWebPluginInfo info) {
-		if (requestHandler_ != null) {
-			return requestHandler_.onBeforePluginLoad(browser, url, policyUrl, info);
-		}
-		return false;
-	}
-
-	@Override
 	public boolean onBeforePopup(CefBrowser browser, String target_url, String target_frame_name) {
 		if (wasDisposed) {
 			return true;
@@ -487,8 +477,6 @@ public class CefClient extends CefClientHandler implements CefContextMenuHandler
 		return false;
 	}
 
-	// CefGeolocationHandler
-
 	@Override
 	public boolean onBeforeResourceLoad(CefBrowser browser, CefRequest request) {
 		if ((requestHandler_ != null) && (browser != null)) {
@@ -496,6 +484,8 @@ public class CefClient extends CefClientHandler implements CefContextMenuHandler
 		}
 		return false;
 	}
+
+	// CefGeolocationHandler
 
 	@Override
 	public boolean onBeforeUnloadDialog(CefBrowser browser, String message_text, boolean is_reload,
@@ -507,22 +497,20 @@ public class CefClient extends CefClientHandler implements CefContextMenuHandler
 	}
 
 	@Override
-	public void onCancelGeolocationPermission(CefBrowser browser, String requesting_url, int request_id) {
+	public void onCancelGeolocationPermission(CefBrowser browser, int request_id) {
 		if ((geolocationHandler_ != null) && (browser != null)) {
-			geolocationHandler_.onCancelGeolocationPermission(browser, requesting_url, request_id);
+			geolocationHandler_.onCancelGeolocationPermission(browser, request_id);
 		}
 	}
 
 	@Override
-	public boolean onCertificateError(ErrorCode cert_error, String request_url,
-			CefAllowCertificateErrorCallback callback) {
+	public boolean onCertificateError(CefBrowser browser, ErrorCode cert_error, String request_url,
+			CefRequestCallback callback) {
 		if (requestHandler_ != null) {
-			return requestHandler_.onCertificateError(cert_error, request_url, callback);
+			return requestHandler_.onCertificateError(browser, cert_error, request_url, callback);
 		}
 		return false;
 	}
-
-	// CefJSDialogHandler
 
 	@Override
 	public boolean onConsoleMessage(CefBrowser browser, String message, String source, int line) {
@@ -531,6 +519,8 @@ public class CefClient extends CefClientHandler implements CefContextMenuHandler
 		}
 		return false;
 	}
+
+	// CefJSDialogHandler
 
 	@Override
 	public boolean onContextMenuCommand(CefBrowser browser, CefContextMenuParams params, int commandId,
@@ -574,8 +564,6 @@ public class CefClient extends CefClientHandler implements CefContextMenuHandler
 		}
 	}
 
-	// CefKeyboardHandler
-
 	@Override
 	public boolean onDragEnter(CefBrowser browser, CefDragData dragData, int mask) {
 		if ((dragHandler_ != null) && (browser != null)) {
@@ -584,11 +572,14 @@ public class CefClient extends CefClientHandler implements CefContextMenuHandler
 		return false;
 	}
 
+	// CefKeyboardHandler
+
 	@Override
-	public boolean onFileDialog(CefBrowser browser, FileDialogMode mode, String title, String defaultFileName,
-			Vector<String> acceptTypes, CefFileDialogCallback callback) {
+	public boolean onFileDialog(CefBrowser browser, FileDialogMode mode, String title, String defaultFilePath,
+			Vector<String> acceptFilters, int selectedAcceptFilter, CefFileDialogCallback callback) {
 		if ((dialogHandler_ != null) && (browser != null)) {
-			return dialogHandler_.onFileDialog(browser, mode, title, defaultFileName, acceptTypes, callback);
+			return dialogHandler_.onFileDialog(browser, mode, title, defaultFilePath, acceptFilters,
+					selectedAcceptFilter, callback);
 		}
 		return false;
 	}
@@ -616,8 +607,6 @@ public class CefClient extends CefClientHandler implements CefContextMenuHandler
 		return false;
 	}
 
-	// CefLifeSpanHandler
-
 	@Override
 	public boolean onKeyEvent(CefBrowser browser, CefKeyEvent event) {
 		if ((keyboardHandler_ != null) && (browser != null)) {
@@ -625,6 +614,8 @@ public class CefClient extends CefClientHandler implements CefContextMenuHandler
 		}
 		return false;
 	}
+
+	// CefLifeSpanHandler
 
 	@Override
 	public void onLoadEnd(CefBrowser browser, int frameIdentifier, int httpStatusCode) {
@@ -680,14 +671,14 @@ public class CefClient extends CefClientHandler implements CefContextMenuHandler
 		}
 	}
 
-	// CefLoadHandler
-
 	@Override
 	public void onPluginCrashed(CefBrowser browser, String pluginPath) {
 		if (requestHandler_ != null) {
 			requestHandler_.onPluginCrashed(browser, pluginPath);
 		}
 	}
+
+	// CefLoadHandler
 
 	@Override
 	public void onPopupShow(CefBrowser browser, boolean show) {
@@ -729,14 +720,12 @@ public class CefClient extends CefClientHandler implements CefContextMenuHandler
 	}
 
 	@Override
-	public boolean onQuotaRequest(CefBrowser browser, String origin_url, long new_size, CefQuotaCallback callback) {
+	public boolean onQuotaRequest(CefBrowser browser, String origin_url, long new_size, CefRequestCallback callback) {
 		if ((requestHandler_ != null) && (browser != null)) {
 			return requestHandler_.onQuotaRequest(browser, origin_url, new_size, callback);
 		}
 		return false;
 	}
-
-	// CefMessageRouter
 
 	@Override
 	public void onRenderProcessTerminated(CefBrowser browser, TerminationStatus status) {
@@ -744,6 +733,8 @@ public class CefClient extends CefClientHandler implements CefContextMenuHandler
 			requestHandler_.onRenderProcessTerminated(browser, status);
 		}
 	}
+
+	// CefMessageRouter
 
 	@Override
 	public boolean onRequestGeolocationPermission(CefBrowser browser, String requesting_url, int request_id,
@@ -754,8 +745,6 @@ public class CefClient extends CefClientHandler implements CefContextMenuHandler
 		return false;
 	}
 
-	// CefRenderHandler
-
 	@Override
 	public void onResetDialogState(CefBrowser browser) {
 		if ((jsDialogHandler_ != null) && (browser != null)) {
@@ -763,10 +752,12 @@ public class CefClient extends CefClientHandler implements CefContextMenuHandler
 		}
 	}
 
+	// CefRenderHandler
+
 	@Override
-	public void onResourceRedirect(CefBrowser browser, String old_url, StringRef new_url) {
+	public void onResourceRedirect(CefBrowser browser, CefRequest request, StringRef new_url) {
 		if ((requestHandler_ != null) && (browser != null)) {
-			requestHandler_.onResourceRedirect(browser, old_url, new_url);
+			requestHandler_.onResourceRedirect(browser, request, new_url);
 		}
 	}
 
@@ -850,11 +841,11 @@ public class CefClient extends CefClientHandler implements CefContextMenuHandler
 		contextMenuHandler_ = null;
 	}
 
-	// CefRequestHandler
-
 	public void removeDialogHandler() {
 		dialogHandler_ = null;
 	}
+
+	// CefRequestHandler
 
 	public void removeDisplayHandler() {
 		displayHandler_ = null;

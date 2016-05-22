@@ -31,6 +31,17 @@ jint GetJNIEnv(JNIEnv **env, bool *mustDetach);
 // END_ENV(e) INSTEAD.
 void DetachFromThread(bool *mustDetach);
 
+// Sets the java class loader to use for creating java objects in native code.
+// We have to use a class loader instead of the JNIEnv::FindClass method
+// because JNIEnv::FindClass always uses the system class loader if called
+// from a non-Java thread, which will not work if the embedding Java code
+// uses a custom class loader for JCEF classes (e.g. in JavaWebStart).
+void SetJavaClassLoader(JNIEnv *env, jobject javaClassLoader);
+
+// Returns a class with the given fully qualified |class_name| (with '/' as
+// separator).
+jclass FindClass(JNIEnv* env, const char* class_name);
+
 // Helper macros to bind and release the JNI environment
 // to other threads than the JNI function was called on.
 #define BEGIN_ENV(e) \
@@ -119,9 +130,6 @@ bool GetJNIFieldObject(JNIEnv* env, jclass cls, jobject obj,
                     const char* field_name, jobject* value,
                     const char* object_type);
 
-//montoyo: classloader fix.
-void SetJNIClassLoader(JNIEnv* env, jobject cl);
-
 // Retrieve the int value stored in the |field_name| field of |cls|.
 bool GetJNIFieldInt(JNIEnv* env, jclass cls, jobject obj,
                     const char* field_name, int* value);
@@ -198,10 +206,10 @@ bool IsJNIEnumValue(JNIEnv* env, jobject jenum, const char* class_name, const ch
 // Helper macros to call a method on the java side
 #define JNI_CALL_METHOD(env, obj, method, sig, type, storeIn, ...) { \
   if (env && obj) { \
-    jclass cls = env->GetObjectClass(obj); \
-    jmethodID methodId = env->GetMethodID(cls, method, sig); \
-    if (methodId != NULL) { \
-      storeIn = env->Call ## type ## Method(obj, methodId, ##__VA_ARGS__); \
+    jclass _cls = env->GetObjectClass(obj); \
+    jmethodID _methodId = env->GetMethodID(_cls, method, sig); \
+    if (_methodId != NULL) { \
+      storeIn = env->Call ## type ## Method(obj, _methodId, ##__VA_ARGS__); \
     } \
     if (env->ExceptionOccurred()) { \
       env->ExceptionDescribe(); \
@@ -212,20 +220,20 @@ bool IsJNIEnumValue(JNIEnv* env, jobject jenum, const char* class_name, const ch
 
 #define JNI_CALL_VOID_METHOD_EX(env, obj, method, sig, ...) { \
   if (env && obj) {\
-    jclass cls = env->GetObjectClass(obj); \
-    jmethodID methodId = env->GetMethodID(cls, method, sig); \
-    if (methodId != NULL) { \
-      env->CallVoidMethod(obj, methodId, ##__VA_ARGS__); \
+    jclass _cls = env->GetObjectClass(obj); \
+    jmethodID _methodId = env->GetMethodID(_cls, method, sig); \
+    if (_methodId != NULL) { \
+      env->CallVoidMethod(obj, _methodId, ##__VA_ARGS__); \
     } \
   } \
 }
 
 #define JNI_CALL_VOID_METHOD(env, obj, method, sig, ...) { \
   if (env && obj) {\
-    jclass cls = env->GetObjectClass(obj); \
-    jmethodID methodId = env->GetMethodID(cls, method, sig); \
-    if (methodId != NULL) { \
-      env->CallVoidMethod(obj, methodId, ##__VA_ARGS__); \
+    jclass _cls = env->GetObjectClass(obj); \
+    jmethodID _methodId = env->GetMethodID(_cls, method, sig); \
+    if (_methodId != NULL) { \
+      env->CallVoidMethod(obj, _methodId, ##__VA_ARGS__); \
     } \
     if (env->ExceptionOccurred()) { \
       env->ExceptionDescribe(); \

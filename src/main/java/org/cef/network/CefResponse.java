@@ -83,7 +83,7 @@ public abstract class CefResponse {
 		returnValue += "\n    HTTP/1.1 " + getStatus() + " " + getStatusText();
 		returnValue += "\n    Content-Type: " + getMimeType();
 
-		Map<String, String> headerMap = new HashMap<String, String>();
+		Map<String, String> headerMap = new HashMap<>();
 		getHeaderMap(headerMap);
 		Set<Entry<String, String>> entrySet = headerMap.entrySet();
 		for (Entry<String, String> entry : entrySet) {

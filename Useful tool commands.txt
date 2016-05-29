@@ -1,0 +1,9 @@
+Useful Funcitons
+
+otool -L <lib name>
+
+for app bundle need to do:
+cd Desktop/MCEFBuilder/run/mcef/jcef_app.app/Contents/Java
+install_name_tool -change "@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" "@loader_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" libjcef.dylib
+
+required copying icudtl.dat, natives_blob.bin, and snapshot_blob.bin to the java home location

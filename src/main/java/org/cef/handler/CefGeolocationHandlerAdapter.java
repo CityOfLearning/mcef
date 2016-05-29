@@ -14,7 +14,7 @@ import org.cef.callback.CefGeolocationCallback;
  */
 public abstract class CefGeolocationHandlerAdapter implements CefGeolocationHandler {
 	@Override
-	public void onCancelGeolocationPermission(CefBrowser browser, String requesting_url, int request_id) {
+	public void onCancelGeolocationPermission(CefBrowser browser, int request_id) {
 	}
 
 	@Override

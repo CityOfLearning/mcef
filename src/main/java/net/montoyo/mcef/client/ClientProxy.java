@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import org.cef.CefApp;
 import org.cef.CefClient;
 import org.cef.CefSettings;
+import org.cef.OS;
 import org.cef.browser.CefBrowserOsr;
 import org.cef.browser.CefMessageRouter;
 import org.cef.browser.CefMessageRouter.CefMessageRouterConfig;
@@ -15,6 +16,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
@@ -33,6 +35,8 @@ import net.montoyo.mcef.virtual.VirtualBrowser;
 public class ClientProxy extends BaseProxy {
 
 	public static String ROOT = ".";
+	public static String APP_PATH = ".";
+	public static String RESOURCE_PATH = ".";
 	public static boolean VIRTUAL = false;
 
 	private CefApp cefApp;
@@ -68,7 +72,19 @@ public class ClientProxy extends BaseProxy {
 		File f = new File(mc.mcDataDir.getParentFile(), "mcef");
 		f.mkdirs();
 		ROOT = f.getAbsolutePath().replaceAll("\\\\", "/");
-
+		if(!addLibraryPaths(ROOT))
+			return;
+		if(OS.isMacintosh()){
+			f = new File(mc.mcDataDir.getParentFile(), "mcef/jcef_app.app/Contents/Java");
+			APP_PATH = f.getAbsolutePath().replaceAll("\\\\", "/");
+			if(!addLibraryPaths(APP_PATH))
+				return;
+			f = new File(mc.mcDataDir.getParentFile(), "mcef/jcef_app.app/Contents/Frameworks/Chromium Embedded Framework.framework/Resources");
+			RESOURCE_PATH = f.getAbsolutePath().replaceAll("\\\\", "/");
+			if(!addLibraryPaths(RESOURCE_PATH))
+				return;
+		}
+		
 		UpdateFrame uf = new UpdateFrame();
 		RemoteConfig cfg = new RemoteConfig();
 
@@ -86,39 +102,29 @@ public class ClientProxy extends BaseProxy {
 			return;
 		}
 
-		Log.info("Now adding \"%s\" to java.library.path", ROOT);
-
-		try {
-			Field pathsField = ClassLoader.class.getDeclaredField("usr_paths");
-			pathsField.setAccessible(true);
-
-			String[] paths = (String[]) pathsField.get(null);
-			String[] newList = new String[paths.length + 1];
-
-			System.arraycopy(paths, 0, newList, 0, paths.length);
-			newList[paths.length] = ROOT.replace('/', File.separatorChar);
-			pathsField.set(null, newList);
-		} catch (Exception e) {
-			Log.error("Failed to do it! Entering virtual mode...");
-			e.printStackTrace();
-
-			VIRTUAL = true;
-			return;
-		}
-
 		Log.info("Done without errors.");
 
 		CefSettings settings = new CefSettings();
 		settings.windowless_rendering_enabled = true;
 		settings.background_color = settings.new ColorType(0, 255, 255, 255);
-		settings.locales_dir_path = (new File(ROOT, "locales")).getAbsolutePath();
+		if(OS.isWindows()){
+			settings.locales_dir_path = (new File(ROOT, "Locales")).getAbsolutePath();
+		} 
+		if(OS.isMacintosh()){
+			settings.resources_dir_path = RESOURCE_PATH;
+			settings.locales_dir_path = RESOURCE_PATH;
+		}
+		
 		settings.cache_path = (new File(ROOT, "MCEFCache")).getAbsolutePath();
 		// settings.log_severity = CefSettings.LogSeverity.LOGSEVERITY_VERBOSE;
 
 		try {
 			cefApp = CefApp.getInstance(settings);
-			cefApp.myLoc = ROOT.replace('/', File.separatorChar);
-
+			if(!OS.isMacintosh()){
+				cefApp.myLoc = ROOT.replace('/', File.separatorChar);
+			} else {
+				cefApp.myLoc = APP_PATH.replace('/', File.separatorChar);
+			}
 			CefApp.addAppHandler(new AppHandler());
 			cefClient = cefApp.createClient();
 		} catch (Throwable t) {
@@ -134,7 +140,7 @@ public class ClientProxy extends BaseProxy {
 		cefClient.addMessageRouter(cefRouter);
 
 		(new ShutdownThread(browsers)).start();
-		FMLCommonHandler.instance().bus().register(this);
+		MinecraftForge.EVENT_BUS.register(this);
 
 		if (MCEF.ENABLE_EXAMPLE) {
 			(new ExampleMod()).onInit();
@@ -160,7 +166,7 @@ public class ClientProxy extends BaseProxy {
 
 	@SubscribeEvent
 	public void onTick(TickEvent.RenderTickEvent ev) {
-		if((ev.phase == TickEvent.Phase.START)){
+		if (ev.phase == TickEvent.Phase.START) {
 			mc.mcProfiler.startSection("MCEF");
 
 			for (CefBrowserOsr b : browsers) {
@@ -201,4 +207,26 @@ public class ClientProxy extends BaseProxy {
 		browsers.remove(b);
 	}
 
+	private boolean addLibraryPaths(String path){
+		Log.info("Now adding \"%s\" to java.library.path", path);
+
+		try {
+				Field pathsField = ClassLoader.class.getDeclaredField("usr_paths");
+				pathsField.setAccessible(true);
+
+				String[] paths = (String[]) pathsField.get(null);
+				String[] newList = new String[paths.length + 1];
+
+				System.arraycopy(paths, 0, newList, 0, paths.length);
+				newList[paths.length] = path.replace('/', File.separatorChar);
+				pathsField.set(null, newList);
+		} catch (Exception e) {
+			Log.error("Failed to do it! Entering virtual mode...");
+			e.printStackTrace();
+
+			VIRTUAL = true;
+			return false;
+		}
+		return true;
+	}
 }

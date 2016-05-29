@@ -532,8 +532,19 @@ public class CefApp extends CefAppHandlerAdapter {
 				// Avoid to override user values by testing on NULL
 				if (OS.isMacintosh()) {
 					if (settings.browser_subprocess_path == null) {
-						Path path = Paths.get(library_path, "../Frameworks/jcef Helper.app/Contents/MacOS/jcef Helper");
+						Path path = Paths.get(library_path,
+				                  "../Frameworks/jcef Helper.app/Contents/MacOS/jcef Helper");
 						settings.browser_subprocess_path = path.normalize().toAbsolutePath().toString();
+					}
+					if (settings.resources_dir_path == null) {
+						Path path = Paths.get(library_path,
+				                  "../Frameworks/Chromium Embedded Framework.framework/Resources");
+						settings.resources_dir_path = path.normalize().toAbsolutePath().toString();
+					}
+					if (settings.locales_dir_path == null) {
+						Path path = Paths.get(library_path,
+				                  "../Frameworks/Chromium Embedded Framework.framework/Resources");
+						settings.locales_dir_path = path.normalize().toAbsolutePath().toString();
 					}
 				} else if (OS.isWindows()) {
 					if (settings.browser_subprocess_path == null) {
@@ -550,10 +561,11 @@ public class CefApp extends CefAppHandlerAdapter {
 						settings.locales_dir_path = library_path + "/locales";
 					}
 				}
-
+				System.out.println("Initializing...");
 				if (N_Initialize(library_path, appHandler_, settings)) {
 					setState(CefAppState.INITIALIZED);
 				}
+				System.out.println("Initialized");
 			};
 			if (SwingUtilities.isEventDispatchThread()) {
 				r.run();
@@ -579,11 +591,9 @@ public class CefApp extends CefAppHandlerAdapter {
 
 	private final native boolean N_RegisterSchemeHandlerFactory(String schemeName, String domainName,
 			CefSchemeHandlerFactory factory);
-
-	private final native void N_SetClassLoader(ClassLoader cl); // montoyo:
-																// function to
-																// fix
-																// classloaders.
+	
+	// montoyo: function to fix classloaders.
+	private final native void N_SetClassLoader(ClassLoader cl); 
 
 	private final native void N_Shutdown();
 

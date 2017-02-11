@@ -79,7 +79,8 @@ public class ClientProxy extends BaseProxy {
 			APP_PATH = f.getAbsolutePath().replaceAll("\\\\", "/");
 			if(!addLibraryPaths(APP_PATH))
 				return;
-			f = new File(mc.mcDataDir.getParentFile(), "mcef/jcef_app.app/Contents/Frameworks/Chromium Embedded Framework.framework/Resources");
+			f = new File(mc.mcDataDir.getParentFile(), " mcef/jcef_app.app/Contents/Frameworks/Chromium Embedded Framework.framework/Resources");
+//			f = new File(mc.mcDataDir.getParentFile(), "mcef/Chromium Embedded Framework.framework/Resources");
 			RESOURCE_PATH = f.getAbsolutePath().replaceAll("\\\\", "/");
 			if(!addLibraryPaths(RESOURCE_PATH))
 				return;
@@ -108,21 +109,22 @@ public class ClientProxy extends BaseProxy {
 		settings.windowless_rendering_enabled = true;
 		settings.background_color = settings.new ColorType(0, 255, 255, 255);
 		if(OS.isWindows()){
-			settings.locales_dir_path = (new File(ROOT, "Locales")).getAbsolutePath();
+			settings.locales_dir_path = (new File(ROOT, "locales")).getAbsolutePath();
 		} 
 		if(OS.isMacintosh()){
-			settings.resources_dir_path = RESOURCE_PATH;
-			settings.locales_dir_path = RESOURCE_PATH;
+//			settings.resources_dir_path = RESOURCE_PATH;
+//			settings.locales_dir_path = RESOURCE_PATH;
 		}
 		
 		settings.cache_path = (new File(ROOT, "MCEFCache")).getAbsolutePath();
-		// settings.log_severity = CefSettings.LogSeverity.LOGSEVERITY_VERBOSE;
+		 settings.log_severity = CefSettings.LogSeverity.LOGSEVERITY_VERBOSE;
 
 		try {
 			cefApp = CefApp.getInstance(settings);
 			if(!OS.isMacintosh()){
 				cefApp.myLoc = ROOT.replace('/', File.separatorChar);
 			} else {
+//				cefApp.myLoc = ROOT.replace('/', File.separatorChar);
 				cefApp.myLoc = APP_PATH.replace('/', File.separatorChar);
 			}
 			CefApp.addAppHandler(new AppHandler());

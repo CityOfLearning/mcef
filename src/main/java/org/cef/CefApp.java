@@ -19,6 +19,8 @@ import org.cef.callback.CefSchemeHandlerFactory;
 import org.cef.handler.CefAppHandler;
 import org.cef.handler.CefAppHandlerAdapter;
 
+import net.montoyo.mcef.utilities.Log;
+
 /**
  * Exposes static methods for managing the global CEF context.
  */
@@ -534,18 +536,28 @@ public class CefApp extends CefAppHandlerAdapter {
 					if (settings.browser_subprocess_path == null) {
 						Path path = Paths.get(library_path,
 				                  "../Frameworks/jcef Helper.app/Contents/MacOS/jcef Helper");
+//						Path path = Paths.get(library_path,
+//				                  "./jcef Helper.app/Contents/MacOS/jcef Helper");
+						Log.info("Setting Subprocess path to: " + path.normalize().toAbsolutePath().toString());
 						settings.browser_subprocess_path = path.normalize().toAbsolutePath().toString();
 					}
 					if (settings.resources_dir_path == null) {
+//						Path path = Paths.get(library_path,
+//				                  "Chromium Embedded Framework.framework/Resources");
 						Path path = Paths.get(library_path,
 				                  "../Frameworks/Chromium Embedded Framework.framework/Resources");
+						Log.info("Setting Resource path to: " + path.normalize().toAbsolutePath().toString());
 						settings.resources_dir_path = path.normalize().toAbsolutePath().toString();
 					}
-					if (settings.locales_dir_path == null) {
+					/*if (settings.locales_dir_path == null) {
+//						Path path = Paths.get(library_path,
+//				                  "Chromium Embedded Framework.framework/Resources");
 						Path path = Paths.get(library_path,
 				                  "../Frameworks/Chromium Embedded Framework.framework/Resources");
+						Log.info("Setting locales path to: " + path.normalize().toAbsolutePath().toString());
+
 						settings.locales_dir_path = path.normalize().toAbsolutePath().toString();
-					}
+					}*/
 				} else if (OS.isWindows()) {
 					if (settings.browser_subprocess_path == null) {
 						settings.browser_subprocess_path = library_path + "\\jcef_helper.exe";
